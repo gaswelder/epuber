@@ -47,16 +47,26 @@ class Writer:
         pass
 
 
-def build(input_path, output_path):
+def main():
+    if len(sys.argv) < 2:
+        print("usage: epuber <project-dir> [<output-path>]")
+        sys.exit(1)
+
+    project_dir = sys.argv[1]
+    if len(sys.argv) < 3:
+        output_path = project_dir.rstrip('/') + ".epub"
+    else:
+        output_path = sys.argv[2]
+
     w = ZipWriter(output_path)
-    pack(input_path, w)
+    pack(project_dir, w)
     w.close()
 
 
-def pack(dir, writer):
+def pack(project_dir, writer):
     """Reads a project in the given directory and writes epub archive using the given file writer"""
     manifest_path = "epub/content.opf"
-    meta, chapters, images = source.read(dir)
+    meta, chapters, images = source.read(project_dir)
 
     flat_chapters = flatten(chapters)
 
@@ -85,4 +95,4 @@ def flatten(chapters):
     return l
 
 
-build(sys.argv[1], sys.argv[2])
+main()
