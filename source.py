@@ -6,9 +6,17 @@ def read(dirpath):
     """Reads a book project located at the given path"""
     meta = parse_meta(dirpath + "/meta")
     chapters = read_part(dirpath + "/chapters")
-    images = [read_image(dirpath + "/images/" + name)
-              for name in os.listdir(dirpath + "/images")]
+    images = read_images(dirpath)
     return (meta, chapters, images)
+
+
+def read_images(dirpath):
+    try:
+        os.stat(dirpath + "/images")
+    except FileNotFoundError:
+        return []
+    names = os.listdir(dirpath + "/images")
+    return [read_image(dirpath + "/images/" + name) for name in names]
 
 
 def parse_meta(path):
