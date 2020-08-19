@@ -9,7 +9,7 @@ class ZipWriter:
     def __init__(self, dest_path):
         self.zip = zipfile.ZipFile(dest_path, "w")
 
-    def write(self, path, content):
+    def write_file(self, path, content):
         with self.zip.open(path, "w") as f:
             if type(content) != bytes:
                 f.write(bytes(content, 'utf-8'))
@@ -18,7 +18,7 @@ class ZipWriter:
 
     def copy(self, path, srcpath):
         with open(srcpath, "rb") as f:
-            self.write(path, f.read())
+            self.write_file(path, f.read())
 
     def close(self):
         self.zip.close()
@@ -28,7 +28,7 @@ class Writer:
     def __init__(self, output_dir):
         self.output_dir = output_dir
 
-    def write(self, path, content):
+    def write_file(self, path, content):
         dirpath = self.output_dir + "/" + os.path.dirname(path)
         if not os.path.exists(dirpath):
             os.makedirs(dirpath)
@@ -41,7 +41,7 @@ class Writer:
 
     def copy(self, path, srcpath):
         with open(srcpath, "rb") as f:
-            self.write(path, f.read())
+            self.write_file(path, f.read())
 
     def close(self):
         pass
@@ -70,18 +70,19 @@ def pack(project_dir, writer):
 
     flat_chapters = flatten(chapters)
 
-    writer.write("mimetype", "application/epub+zip")
-    writer.write("META-INF/container.xml", epubfiles.container(manifest_path))
+    writer.write_file("mimetype", "application/epub+zip")
+    writer.write_file("META-INF/container.xml",
+                      epubfiles.container(manifest_path))
     writer.copy("epub/style.css",
                 os.path.join(os.path.dirname(__file__), "style.css"))
-    writer.write(manifest_path, epubfiles.manifest(
+    writer.write_file(manifest_path, epubfiles.manifest(
         flat_chapters, images, meta))
-    writer.write("epub/toc.ncx", epubfiles.ncx(chapters))
+    writer.write_file("epub/toc.ncx", epubfiles.ncx(chapters))
     for chapter in flat_chapters:
-        writer.write("epub/" + chapter["path"],
-                     epubfiles.chapter(chapter, meta))
+        writer.write_file("epub/" + chapter["path"],
+                          epubfiles.chapter(chapter, meta))
     for f in images:
-        writer.write("epub/" + f["path"], f["content"])
+        writer.write_file("epub/" + f["path"], f["content"])
 
 
 def flatten(chapters):
