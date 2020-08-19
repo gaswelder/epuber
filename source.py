@@ -1,5 +1,6 @@
 import os
 import re
+import markdown2
 
 
 def read(dirpath):
@@ -61,6 +62,10 @@ def local_path(path):
 def read_chapter(path):
     with open(path) as f:
         content = f.read()
+    if path.endswith('.md'):
+        content = markdown2.markdown(content)
+        path = path.replace('.md', '.html')
+
     return {
         "path": local_path(path),
         "type": mime_type(path),
