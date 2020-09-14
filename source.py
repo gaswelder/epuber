@@ -12,12 +12,40 @@ def read(dirpath):
 
 
 def read_images(dirpath):
+    def read_file(path):
+        with open(path, 'rb') as f:
+            return {
+                "path": local_path(path),
+                "type": mime_type(path),
+                "content": f.read()
+            }
+
+    # Get gover
+    cover = None
+    cover_files = ["cover.jpg", "cover.png"]
+    for name in cover_files:
+        try:
+            cover = read_file(dirpath + "/" + name)
+        except FileNotFoundError:
+            pass
+
+    if cover is None:
+        raise Exception("Cover image not found")
+
+    images = [cover]
+
+    # Read images if present
     try:
         os.stat(dirpath + "/images")
     except FileNotFoundError:
-        return []
+        return images
+
     names = os.listdir(dirpath + "/images")
-    return [read_image(dirpath + "/images/" + name) for name in names]
+    for name in names:
+        path = dirpath + "/images/" + name
+        images.append(read_file(path))
+
+    return images
 
 
 def parse_meta(path):
@@ -43,16 +71,6 @@ def read_part(dirpath):
         else:
             files.append(read_chapter(path))
     return files
-
-
-def read_image(path):
-    """Reads an image located at the given path"""
-    with open(path, 'rb') as f:
-        return {
-            "path": local_path(path),
-            "type": mime_type(path),
-            "content": f.read()
-        }
 
 
 def local_path(path):
