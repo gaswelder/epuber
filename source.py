@@ -81,7 +81,7 @@ def read_chapter(path):
     with open(path) as f:
         content = f.read()
     if path.endswith('.md'):
-        content = markdown2.markdown(content)
+        content = markdown2.markdown(content).replace('<br>', '<br/>')
         path = path.replace('.md', '.html')
 
     return {
