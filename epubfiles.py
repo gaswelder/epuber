@@ -35,14 +35,20 @@ def validate_xml(s):
     try:
         xml.dom.minidom.parseString(s)
     except xml.parsers.expat.ExpatError as e:
-        line = s.split("\n")[e.lineno - 1]
-        print(f'{str(e)}: {line}')
+        return {
+            "message": str(e),
+            "line": s.split("\n")[e.lineno - 1]
+        }
 
 
 def validatexml(func):
     def with_validation(*args):
         s = func(*args)
-        validate_xml(s)
+        err = validate_xml(s)
+        if err is not None:
+            message = err['message']
+            line = err['line']
+            print(f'{message}: {line}')
         return s
     return with_validation
 
@@ -163,7 +169,6 @@ def nav_point(chapter):
         </navPoint>"""
 
 
-@validatexml
 def chapter(chapter, meta):
     content = fix_html(chapter['content'])
     return f"""<?xml version="1.0" encoding="utf-8"?>

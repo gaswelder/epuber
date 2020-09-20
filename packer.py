@@ -70,17 +70,25 @@ def pack(project_dir, writer):
 
     flat_chapters = flatten(chapters)
 
-    writer.write_file("mimetype", "application/epub+zip")
-    writer.write_file("META-INF/container.xml",
-                      epubfiles.container(manifest_path))
     writer.copy("epub/style.css",
                 os.path.join(os.path.dirname(__file__), "style.css"))
-    writer.write_file(manifest_path, epubfiles.manifest(
-        flat_chapters, images, meta))
-    writer.write_file("epub/toc.ncx", epubfiles.ncx(chapters))
+    files = [
+        ("mimetype", "application/epub+zip"),
+        ("META-INF/container.xml", epubfiles.container(manifest_path)),
+        (manifest_path, epubfiles.manifest(flat_chapters, images, meta)),
+        ("epub/toc.ncx", epubfiles.ncx(chapters))
+    ]
     for chapter in flat_chapters:
-        writer.write_file("epub/" + chapter["path"],
-                          epubfiles.chapter(chapter, meta))
+        src = epubfiles.chapter(chapter, meta)
+        err = epubfiles.validate_xml(src)
+        if err is not None:
+            print('%s: %s: %s' %
+                  (chapter['path'], err['message'], err['line']))
+        files.append(("epub/" + chapter["path"], src))
+
+    for path, content in files:
+        writer.write_file(path, content)
+
     for f in images:
         writer.write_file("epub/" + f["path"], f["content"])
 
