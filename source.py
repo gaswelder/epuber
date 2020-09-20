@@ -100,12 +100,13 @@ def mime_type(path):
         ("png", "image/png"),
         ("xhtml", "application/xhtml+xml"),
         # Allow html extension for source files to let viewing them with a browser.
-        ("html", "application/xhtml+xml")
+        ("html", "application/xhtml+xml"),
+        ("htm", "application/xhtml+xml")
     ]
     for ext, t in types:
         if path.endswith("." + ext):
             return t
-    raise "Unknown extension: " + path
+    raise Exception("Unknown extension: " + path)
 
 
 def chapter_title(content):
