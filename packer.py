@@ -70,6 +70,15 @@ def pack(project_dir, writer):
 
     flat_chapters = flatten(chapters)
 
+    no_titles = True
+    for c in flat_chapters:
+        if c['title'] is not None:
+            no_titles = False
+            break
+
+    if no_titles:
+        raise Exception("The book doesn't have chapter titles")
+
     writer.copy("epub/style.css",
                 os.path.join(os.path.dirname(__file__), "style.css"))
     files = [
