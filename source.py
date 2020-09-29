@@ -113,7 +113,8 @@ def mime_type(path):
 
 def chapter_title(content):
     e = r'<h\d>(.*?)<\/h\d>'
-    m = re.search(e, content)
+    regex = re.compile(e, re.MULTILINE | re.DOTALL)
+    m = re.search(regex, content)
     if m is None:
         return None
     return m[1]

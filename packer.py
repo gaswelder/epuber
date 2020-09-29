@@ -69,6 +69,19 @@ def pack(project_dir, writer):
     meta, chapters, images = source.read(project_dir)
 
     flat_chapters = flatten(chapters)
+    invalid_titles = []
+    for c in flat_chapters:
+        title = c['title']
+        if title is None:
+            continue
+        if title.find('<') != -1:
+            invalid_titles.append(title)
+
+    if len(invalid_titles) > 0:
+        print("Invalid titles:")
+        for t in invalid_titles:
+            print(f'\t"{t}"')
+        exit(1)
 
     no_titles = True
     for c in flat_chapters:
