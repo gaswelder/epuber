@@ -7,6 +7,13 @@ p {
   text-indent: 20pt;
 }
 
+h1 + p,
+h2 + p,
+h3 + p,
+h4 + p {
+  text-indent: 0;
+}
+
 p + aside {
   margin: 1em 0 2em;
 }
