@@ -75,12 +75,12 @@ def pack(project_dir, writer):
         if title is None:
             continue
         if title.find('<') != -1:
-            invalid_titles.append(title)
+            invalid_titles.append([title, c['path']])
 
     if len(invalid_titles) > 0:
         print("Invalid titles:")
-        for t in invalid_titles:
-            print(f'\t"{t}"')
+        for title, path in invalid_titles:
+            print(f'\t"{title}" ({path})')
         exit(1)
 
     no_titles = True
