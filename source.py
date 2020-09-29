@@ -6,7 +6,7 @@ import markdown2
 def read(dirpath):
     """Reads a book project located at the given path"""
     meta = parse_meta(dirpath + "/meta")
-    chapters = read_part(dirpath + "/chapters")
+    chapters = read_chapters_folder(dirpath + "/chapters")
     images = read_images(dirpath)
     return (meta, chapters, images)
 
@@ -61,13 +61,15 @@ def parse_meta(path):
     return meta
 
 
-def read_part(dirpath):
-    """Reads a collection (folder) of chapters"""
+def read_chapters_folder(dirpath):
+    """Reads a collection (folder) of chapters.
+    Returns a list containing chapter objects or nested lists in the case
+    of nested folders."""
     files = []
     for name in sorted(os.listdir(dirpath)):
         path = dirpath + "/" + name
         if os.path.isdir(path):
-            files.append(read_part(path))
+            files.append(read_chapters_folder(path))
         else:
             files.append(read_chapter(path))
     return files
