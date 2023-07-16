@@ -1,11 +1,7 @@
-import os
 import xml
 import xml.dom.minidom
 import html.parser
 import re
-
-# There's a rumor that epub readers only support the "quo, amp, apos, lt and gt quintet."
-
 
 def escape_xml(s):
     if not s:
@@ -21,10 +17,10 @@ def escape_xml(s):
         s = s.replace(a, b)
     return s
 
-
 def fix_html(s):
     a = set(re.findall(r'&\w+;', s))
     for entity in a:
+        # There's a rumor that epub readers only support the "quo, amp, apos, lt and gt quintet."
         if entity in ["&apos;", "&quot;", "&gt;", "&lt;", "&amp;"]:
             continue
         s = s.replace(entity, html.unescape(entity))
@@ -54,20 +50,13 @@ def validatexml(func):
 
 
 @validatexml
-def manifest(chapters, images, meta):
-    cover = None
-    for f in images:
-        if os.path.basename(f['path']).startswith("cover."):
-            cover = f
-            break
+def manifest(chapters, images, meta, cover):
+    files = chapters + images + [cover]
 
-    if cover is None:
-        raise Exception("Missing cover")
+    file_items = ""
+    for f in files:
+        file_items += f'<item href="{f["path"]}" id="{f["path"]}" media-type="{f["type"]}"/>\n'
 
-    files = chapters + images
-
-    file_items = "".join(
-        [f'<item href="{f["path"]}" id="{f["path"]}" media-type="{f["type"]}"/>' for f in files])
     itemrefs = "\n".join([f'<itemref idref="{c["path"]}"/>' for c in chapters])
 
     return f"""<?xml version = "1.0" encoding = "utf-8"?>
