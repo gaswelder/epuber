@@ -51,7 +51,9 @@ def validatexml(func):
 
 @validatexml
 def manifest(chapters, images, meta, cover):
-    files = chapters + images + [cover]
+    files = chapters + images
+    if cover is not None:
+        files = files + [cover]
 
     file_items = ""
     for f in files:
@@ -72,7 +74,7 @@ def manifest(chapters, images, meta, cover):
             xmlns:dcterms="http://purl.org/dc/terms/"
             xmlns:dc="http://purl.org/dc/elements/1.1/"
             >
-            <meta name="cover" content="{cover['path']}"/>
+            {"" if cover is None else cover['path']}
             <dc:title>{meta['title']}</dc:title>
             <dc:language>{meta['language']}</dc:language>
             <dc:creator>{meta['author']}</dc:creator>
