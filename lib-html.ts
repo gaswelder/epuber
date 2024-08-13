@@ -26,3 +26,7 @@ export function toHTML(element: XmlNode) {
 function escape(str: string) {
   return str.replace("&", "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
+
+export const unescape = (entity: string) => {
+  return `TODO:unescape(${entity.replace('&', '&amp;')})`
+}
