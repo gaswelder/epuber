@@ -1,15 +1,14 @@
-const fs = require("fs");
-const child_process = require("child_process");
-const epub = require("/home/gas/code/pub/epub-reader/epub/epub.bin");
+import * as fs from "fs";
+import * as child_process from "child_process";
+import * as epub from "./lib"
 
-const main = (args) => {
+const main = async (args: string[]) => {
   if (args.length == 0) {
     console.log(
       "usage:\n\tepub init <dirname>\n\tepub build <dirname>\n\tepub rename [-d] <filepath...>"
     );
     return 1;
   }
-
   switch (args[0]) {
     case "init":
       return init(args.slice(1));
@@ -23,7 +22,7 @@ const main = (args) => {
   }
 };
 
-const init = async (args) => {
+const init = async (args: string[]) => {
   if (args.length != 1) {
     console.log("usage: init <dirname>");
     return 1;
@@ -42,7 +41,7 @@ language = en
   return 0;
 };
 
-const build = async (args) => {
+const build = async (args: string[]) => {
   if (args.length != 1) {
     console.log("usage: build <dirname>");
     return 1;
@@ -56,7 +55,7 @@ const build = async (args) => {
   return 0;
 };
 
-const rename = async (args) => {
+const rename = async (args: string[]) => {
   let errors = 0;
   let dry = false;
   if (args[0] == "-d") {
@@ -89,4 +88,6 @@ const rename = async (args) => {
   }
 };
 
-process.exit(main(process.argv.slice(2)));
+main(process.argv.slice(2)).then(x => {
+  process.exit(x || 1)
+})
