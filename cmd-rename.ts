@@ -12,8 +12,8 @@ export const rename = async (args: string[]) => {
   for (const path of args) {
     const data = fs.readFileSync(path);
     const b = await epub.load(data);
-    const title = await b.title();
-    const author = await b.author();
+    const title = b.title();
+    const author = b.author();
     if (!title || !author) {
       process.stderr.write(
         `couldn't get title or author (${author} ${title})\n`

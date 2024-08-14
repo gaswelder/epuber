@@ -184,14 +184,14 @@ export const load = async (src: any) => {
     /**
      * Returns the book's title.
      */
-    title: function () {
+    title() {
       return indexDoc.descendantWithPath("metadata.dc:title")?.val;
     },
 
     /**
      * Returns the book's language.
      */
-    language: function () {
+    language() {
       return indexDoc.descendantWithPath("metadata.dc:language")?.val;
     },
 

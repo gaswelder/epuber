@@ -54,6 +54,11 @@
   dependencies:
     undici-types "~6.13.0"
 
+"@types/xmldoc@^1.1.9":
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/@types/xmldoc/-/xmldoc-1.1.9.tgz#d6609d823c8f15f913b9d5274324dc1014a53b53"
+  integrity sha512-HLwIAudQ9xedPOK9rKd7gSHYzM5qtWOzae9z5tM7dRDR1hWeNlFSejfnxFMIv06mm2LmtX+pzVQ4GN86vf/b3g==
+
 acorn-walk@^8.1.1:
   version "8.3.3"
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-8.3.3.tgz#9caeac29eefaa0c41e3d4c65137de4d6f34df43e"
