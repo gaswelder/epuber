@@ -3,3 +3,4 @@ in/
 out/
 node_modules
 *.epub
+build/

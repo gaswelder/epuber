@@ -6,7 +6,8 @@
     "outDir": "build",
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "target": "ES2022"
+    "target": "ES2022",
+    "module": "CommonJS"
   },
   "files": ["index.ts"]
 }
