@@ -196,7 +196,7 @@ export const load = async (src: any) => {
     },
 
     author() {
-      return indexDoc.descendantWithPath("metadata.dc:author")?.val;
+      return indexDoc.descendantWithPath("metadata.dc:creator")?.val;
     },
 
     stylesheet: async function () {
