@@ -37,8 +37,10 @@ export const html = async (args: string[]) => {
   }
   const css = await book.stylesheet();
   const content = chaptersHTML.join("");
-  process.stdout.write(
-    `<!DOCTYPE html><html lang=""><head><style>${css}</style></head><body>${content}</body></html>`
-  );
+  await new Promise(res => {
+    process.stdout.write(
+      `<!DOCTYPE html><html lang=""><head><style>${css}</style></head><body>${content}</body></html>`, res
+    );
+  })
   return 0;
 };
